@@ -10,6 +10,7 @@ class MassiveApp : Application() {
         // init timber
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+            Timber.tag("ars")
         }
 
     }

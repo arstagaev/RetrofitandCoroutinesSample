@@ -15,6 +15,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.revolve44.postmakermassive.MassiveApp
 import com.revolve44.postmakermassive.models.alfa.CurrentForecast
+import com.revolve44.postmakermassive.models.alfa.beta.FiveDaysForecast
 import com.revolve44.postmakermassive.repository.MassiveRepository
 import com.revolve44.postmakermassive.utils.Constants.Companion.TAGZ
 import com.revolve44.postmakermassive.utils.Resource
@@ -26,12 +27,12 @@ import java.lang.Exception
 class MainViewModel(app : Application, val  mrepository: MassiveRepository) :AndroidViewModel(app) {
 
     private val alphaRequest : MutableLiveData<Resource<CurrentForecast>> = MutableLiveData()
+    private val betaRequest : MutableLiveData<Resource<FiveDaysForecast>> = MutableLiveData()
 
     init {
         startAlphaRequest()
         startBetaRequest()
         Timber.i("init viewModel")
-
 
     }
 
@@ -45,6 +46,15 @@ class MainViewModel(app : Application, val  mrepository: MassiveRepository) :And
     }
 
     private suspend fun safeBetaRequest() {
+        betaRequest.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()){
+                Timber.i("")
+            }
+        }catch (e : Exception){
+
+        }
+
 
     }
 
@@ -69,7 +79,7 @@ class MainViewModel(app : Application, val  mrepository: MassiveRepository) :And
         if (response.isSuccessful){
             response.body()?.let {resultResponse ->
                 try {
-                    Timber.i("asd answer: "+resultResponse.clouds)
+                    Timber.d("answer: "+resultResponse.clouds)
                     //Log.d("pizdec ",resultResponse.name+" //")
                 }catch (e : Exception){
                     Timber.e("asd Error in ViewModel: "+e)
